@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine? 🐷💖</title>
+    <title>For My 寶寶 🐷❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -14,11 +14,10 @@
             align-items: center;
             height: 100vh;
             background-color: #fff0f5;
-            /* Poppy & Heart themed background */
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(255, 0, 0, 0.05) 0%, transparent 10%),
-                radial-gradient(circle at 90% 90%, rgba(255, 0, 0, 0.05) 0%, transparent 10%);
-            font-family: 'Arial Round', sans-serif;
+                radial-gradient(circle at 15% 15%, rgba(255, 0, 0, 0.05) 0%, transparent 15%),
+                radial-gradient(circle at 85% 85%, rgba(255, 0, 0, 0.05) 0%, transparent 15%);
+            font-family: 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; /* Supports Chinese characters better */
             overflow: hidden;
             text-align: center;
         }
@@ -30,9 +29,9 @@
             box-shadow: 0 15px 35px rgba(255, 182, 193, 0.5);
             border: 5px solid #ffccd5;
             z-index: 10;
+            transition: all 0.5s ease;
         }
 
-        /* Bouncing Pig Animation */
         .piggy-container { 
             font-size: 5rem; 
             margin-bottom: 20px;
@@ -41,19 +40,18 @@
         }
 
         @keyframes pigBounce {
-            from { transform: translateY(0) scale(1); }
-            to { transform: translateY(-20px) scale(1.05); }
+            from { transform: translateY(0); }
+            to { transform: translateY(-25px); }
         }
 
-        h1 { color: #ff1493; font-size: 2.5rem; text-shadow: 2px 2px #ffe4e1; }
+        h1 { color: #ff1493; font-size: 2.2rem; margin-bottom: 20px; }
 
         .btn-group {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 25px;
-            margin-top: 40px;
-            min-height: 100px;
+            min-height: 120px;
         }
 
         #yesBtn {
@@ -65,7 +63,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 8px 15px rgba(255, 20, 147, 0.3);
             z-index: 100;
         }
@@ -78,17 +76,17 @@
             border-radius: 50px;
             font-size: 1.2rem;
             cursor: pointer;
-            position: relative;
+            z-index: 50;
         }
 
-        .flower-bg { position: absolute; pointer-events: none; z-index: 1; filter: drop-shadow(0 0 5px white); }
+        .decoration { position: absolute; pointer-events: none; z-index: 1; opacity: 0.4; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="piggy-container">🐷🌷🐷</div>
-        <h1 id="headline">Will you be my Valentine?</h1>
+        <h1 id="messageText">Will you be my Valentine?</h1>
         
         <div class="btn-group">
             <button id="yesBtn">YES! 😍</button>
@@ -99,31 +97,48 @@
     <script>
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
-        const headline = document.getElementById('headline');
+        const messageText = document.getElementById('messageText');
         let yesScale = 1;
 
         // Yes Button Logic
         yesBtn.addEventListener('click', () => {
-            // 1. Grow the button
-            yesScale += 0.5;
-            yesBtn.style.transform = `scale(${yesScale})`;
+            // Change message
+            messageText.innerText = "I love you too 寶寶";
             
-            // 2. Hide the No button
+            // Hide the No button
             noBtn.style.display = 'none';
             
-            // 3. Update text
-            headline.innerText = "YAY! BEST CHOICE EVER! 🐷💖";
+            // Grow Yes button slightly and stop it from jumping
+            yesScale += 0.3;
+            yesBtn.style.transform = `scale(${yesScale})`;
             
-            // 4. Confetti Party!
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff69b4', '#ff1493', '#ff0000']
-            });
+            // Trigger Confetti Party
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff69b4', '#ff1493']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff69b4', '#ff1493']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         });
 
-        // No Button Logic (Evasive Maneuvers)
+        // No Button Evasion
         const moveNo = () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -138,21 +153,20 @@
             moveNo();
         });
 
-        // Creating floating hearts and poppies
-        function createDecoration(symbol) {
-            const el = document.createElement('div');
-            el.className = 'flower-bg';
-            el.innerText = symbol;
-            el.style.left = Math.random() * 100 + 'vw';
-            el.style.top = Math.random() * 100 + 'vh';
-            el.style.fontSize = (Math.random() * 30 + 10) + 'px';
-            el.style.opacity = '0.4';
-            document.body.appendChild(el);
+        // Background Decorations
+        function createDecor() {
+            const symbols = ['🌺', '❤️', '🌹', '🌷', '🐷'];
+            for(let i=0; i<40; i++) {
+                const el = document.createElement('div');
+                el.className = 'decoration';
+                el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.top = Math.random() * 100 + 'vh';
+                el.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                document.body.appendChild(el);
+            }
         }
-
-        ['🌺', '❤️', '🌹', '🌷', '💖'].forEach(sym => {
-            for(let i=0; i<10; i++) createDecoration(sym);
-        });
+        createDecor();
     </script>
 </body>
 </html>
