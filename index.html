@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Question 🐷❤️</title>
+    <title>Be My Valentine? 🐷💖</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
@@ -13,82 +13,82 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffe4e1;
-            /* Romantic background gradient */
+            background-color: #fff0f5;
+            /* Poppy & Heart themed background */
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.4) 0%, transparent 20%),
-                radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.3) 0%, transparent 25%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                radial-gradient(circle at 10% 10%, rgba(255, 0, 0, 0.05) 0%, transparent 10%),
+                radial-gradient(circle at 90% 90%, rgba(255, 0, 0, 0.05) 0%, transparent 10%);
+            font-family: 'Arial Round', sans-serif;
             overflow: hidden;
             text-align: center;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 4px solid #ffb6c1;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3rem;
+            border-radius: 40px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.5);
+            border: 5px solid #ffccd5;
             z-index: 10;
-            max-width: 85%;
-            transition: all 0.3s ease;
         }
 
-        h1 { color: #d02090; margin-bottom: 10px; font-size: 2rem; }
-        p { font-size: 1.1rem; color: #666; font-style: italic; }
-        
-        .piggy-container { font-size: 4.5rem; margin: 20px 0; animation: bounce 2s infinite; }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* Bouncing Pig Animation */
+        .piggy-container { 
+            font-size: 5rem; 
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: pigBounce 0.6s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
         }
+
+        @keyframes pigBounce {
+            from { transform: translateY(0) scale(1); }
+            to { transform: translateY(-20px) scale(1.05); }
+        }
+
+        h1 { color: #ff1493; font-size: 2.5rem; text-shadow: 2px 2px #ffe4e1; }
 
         .btn-group {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            margin-top: 30px;
-            position: relative;
-            min-height: 150px; /* Space for growing button */
+            gap: 25px;
+            margin-top: 40px;
+            min-height: 100px;
         }
 
         #yesBtn {
-            background-color: #ff69b4;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
             color: white;
             border: none;
-            padding: 15px 35px;
+            padding: 15px 40px;
             border-radius: 50px;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            transition: transform 0.2s;
+            box-shadow: 0 8px 15px rgba(255, 20, 147, 0.3);
             z-index: 100;
         }
 
         #noBtn {
-            background-color: #bdc3c7;
-            color: white;
+            background-color: #d3d3d3;
+            color: #666;
             border: none;
             padding: 15px 30px;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             position: relative;
-            transition: 0.15s ease-out;
         }
 
-        .floating-emoji { position: absolute; pointer-events: none; z-index: 1; }
+        .flower-bg { position: absolute; pointer-events: none; z-index: 1; filter: drop-shadow(0 0 5px white); }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainCard">
+    <div class="container">
         <div class="piggy-container">🐷🌷🐷</div>
-        <h1 id="mainHeading">Will you be my Valentine?</h1>
-        <p id="subText">I'm hog-wild about you! ❤️</p>
+        <h1 id="headline">Will you be my Valentine?</h1>
         
         <div class="btn-group">
             <button id="yesBtn">YES! 😍</button>
@@ -99,38 +99,34 @@
     <script>
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
-        const heading = document.getElementById('mainHeading');
-        const subText = document.getElementById('subText');
+        const headline = document.getElementById('headline');
         let yesScale = 1;
 
-        // Confetti Function
-        function fireConfetti() {
-            const defaults = { spread: 360, ticks: 100, gravity: 0.5, decay: 0.94, startVelocity: 30, shapes: ['heart'], colors: ['#FF69B4', '#FF1493', '#FFFFFF'] };
-            
-            confetti({ ...defaults, particleCount: 50, scalar: 2 });
-            confetti({ ...defaults, particleCount: 25, scalar: 3 });
-        }
-
-        // Growing Yes Button
+        // Yes Button Logic
         yesBtn.addEventListener('click', () => {
-            yesScale += 0.4;
+            // 1. Grow the button
+            yesScale += 0.5;
             yesBtn.style.transform = `scale(${yesScale})`;
             
-            // Trigger Confetti
-            fireConfetti();
-
-            if(yesScale > 2) {
-                heading.innerText = "YAY! BEST DAY EVER! 💖";
-                subText.innerText = "You've made this piggy so happy! 🐷🎀";
-            }
+            // 2. Hide the No button
+            noBtn.style.display = 'none';
+            
+            // 3. Update text
+            headline.innerText = "YAY! BEST CHOICE EVER! 🐷💖";
+            
+            // 4. Confetti Party!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff69b4', '#ff1493', '#ff0000']
+            });
         });
 
-        // Moving No Button logic
+        // No Button Logic (Evasive Maneuvers)
         const moveNo = () => {
-            const padding = 50;
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
-            
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.position = 'fixed';
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
@@ -142,20 +138,20 @@
             moveNo();
         });
 
-        // Background decorations
-        function createFloatingEmoji(emoji) {
+        // Creating floating hearts and poppies
+        function createDecoration(symbol) {
             const el = document.createElement('div');
-            el.className = 'floating-emoji';
-            el.innerText = emoji;
+            el.className = 'flower-bg';
+            el.innerText = symbol;
             el.style.left = Math.random() * 100 + 'vw';
             el.style.top = Math.random() * 100 + 'vh';
-            el.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            el.style.opacity = Math.random() * 0.5 + 0.2;
+            el.style.fontSize = (Math.random() * 30 + 10) + 'px';
+            el.style.opacity = '0.4';
             document.body.appendChild(el);
         }
 
-        ['🌺', '❤️', '🌹', '🐷', '🌸'].forEach(e => {
-            for(let i=0; i<8; i++) createFloatingEmoji(e);
+        ['🌺', '❤️', '🌹', '🌷', '💖'].forEach(sym => {
+            for(let i=0; i<10; i++) createDecoration(sym);
         });
     </script>
 </body>
